@@ -4,8 +4,29 @@
 // so it is better to use BST. We could choose heap if order would not be the prioirity 
 // and we just need to be sure that insert and remove takes O(log(n)) time,
 // then the Heap guarantees to achieve this time but order also has been a priority in our case.
-// In a Binary Search Tree, this may take up to O(n) time, but still choosing it because
-// we can have unbalanced tree and order is a priority.
+// In a Binary Search Tree, this may take up to O(n) time for searching a node in worst case,
+// but still choosing it because we can have unbalanced tree and order is a priority.
+// Also
+// We have to make a little change to BST while inserting nodes in tree that
+// we need to reverse the comparison while inserting element to the tree like
+
+// struct StructNode *insertElementInTree(struct StructNode *node, Student student) {
+//     // Return a new node if the tree is empty
+//     if (node == NULL) return createNode(student);
+//     // Traverse to the right place and insert the node
+//     if (student.total > node->student.total) //this comparison is changed => reversed
+//     {
+//         // putting the higher total marks student at left
+//         // so in order retrieval will bring up the highest marks student first (on top)
+//         node->left = insertElementInTree(node->left, student);
+//     }
+//     else
+//     {
+//         node->right = insertElementInTree(node->right, student);
+//     }
+//     return node;
+// }
+
 
 
 
