@@ -1,4 +1,14 @@
-// Online C++ compiler to run C++ program online
+// I have chosen BST, rather than heap
+// Because
+// BST is ordered, but the Heap is not. As in our case order matters,
+// so it is better to use BST. We could choose heap if order would not be the prioirity 
+// and we just need to be sure that insert and remove takes O(log(n)) time,
+// then the Heap guarantees to achieve this time but order also has been a priority in our case.
+// In a Binary Search Tree, this may take up to O(n) time, but still choosing it because
+// we can have unbalanced tree and order is a priority.
+
+
+
 #include <iostream>
 #include <string>
 #include <list>
@@ -6,12 +16,13 @@ using namespace std;
 
 class Student{
     public:
+    int test = 0;
+    int inter = 0;
+    int matric = 0;
+    
+    int total = 0;
     string name = "";
     string enrollment;
-    int test = 0;
-    int matric = 0;
-    int inter = 0;
-    int total = 0;
     int get_total_marks(){
         return test+matric+inter;
     }
@@ -22,6 +33,7 @@ class Student{
         cout<<"\nEnrollment => "<<enrollment;
         if(total == 0)
         {
+            //will be called only once when instance is created
             total = get_total_marks();
         }
         cout<<"\nMarks => "<<total<<"\n";
@@ -39,29 +51,17 @@ struct StructNode {
 };
 
 // Create a node
-struct StructNode *newNode(Student item) {
-    struct StructNode *temp = (struct StructNode *)malloc(sizeof(struct StructNode));
+struct StructNode *createNode(Student item) {
+    struct StructNode *temp = new StructNode;
     temp->key = item;
     temp->left = temp->right = NULL;
     return temp;
 }
 
-// Inorder Traversal
-void read_bst_inorder(struct StructNode *root) {
-    if (root != NULL) {
-        // Traverse left
-        read_bst_inorder(root->left);
-        // Traverse root
-        root->key.show();
-        // Traverse right
-        read_bst_inorder(root->right);
-    }
-}
-
 // Insert a node
 struct StructNode *insertElementInTree(struct StructNode *node, Student key) {
     // Return a new node if the tree is empty
-    if (node == NULL) return newNode(key);
+    if (node == NULL) return createNode(key);
     // Traverse to the right place and insert the node
     if (key.total > node->key.total)
     {
@@ -73,53 +73,6 @@ struct StructNode *insertElementInTree(struct StructNode *node, Student key) {
     }
     return node;
 }
-
-// Find the inorder successor
-struct StructNode *minValueNode(struct StructNode *node) {
-    struct StructNode *current = node;
-    // Find the leftmost leaf
-    while (current && current->left != NULL)
-    {
-        current = current->left;
-    }
-    return current;
-}
-
-// Deleting a node
-struct StructNode *deleteNode(struct StructNode *root, Student key) {
-    // Return if the tree is empty
-    if (root == NULL) return root;
-    // Find the node to be deleted
-    if (key.total < root->key.total)
-    {
-        root->left = deleteNode(root->left, key);
-    }
-    else if (key.total > root->key.total)
-    {
-        root->right = deleteNode(root->right, key);
-    }
-    else {
-        // If the node is with only one child or no child
-        if (root->left == NULL) {
-            struct StructNode *temp = root->right;
-            free(root);
-            return temp;
-        } else if (root->right == NULL) {
-            struct StructNode *temp = root->left;
-            free(root);
-            return temp;
-        }
-        // If the node has two children
-        struct StructNode *temp = minValueNode(root->right);
-        // Place the inorder successor in position of the node to be deleted
-        root->key = temp->key;
-        // Delete the inorder successor
-        root->right = deleteNode(root->right, temp->key);
-    }
-    enrolled_students -= 1;
-    return root;
-}
-
 
 struct StructNode *add_student(struct StructNode *root){
     int total_test_marks = 100;
@@ -142,6 +95,17 @@ struct StructNode *add_student(struct StructNode *root){
     return root;
 }
 
+// Inorder Traversal
+void read_bst_inorder(struct StructNode *root) {
+    if (root != NULL) {
+        // Traverse left
+        read_bst_inorder(root->left);
+        // Traverse root
+        root->key.show();
+        // Traverse right
+        read_bst_inorder(root->right);
+    }
+}
 
 void find_student(struct StructNode *root, string enrollment, int cnt) {
     if (root != NULL) {
@@ -168,6 +132,10 @@ int main() {
     string enrollment;
     struct StructNode *root = NULL;
     int turns = 1;
+    cout <<"\n\n*****************************************";
+    cout <<"\n\tWelcome to Student management system";
+    cout <<"\n*****************************************";
+    
     while(option != 'q' && turns < 15){
         cout <<"\n\n Press 1 to add student";
         cout <<"\n Press 2 to show list of students";
@@ -178,7 +146,7 @@ int main() {
         switch(option){
             case '1':
                 root = add_student(root);
-                cout << "\n\n Will add student";
+                cout << "\n\n Student inserted";
                 break;
             case '2':
                 read_bst_inorder(root);
